@@ -1,0 +1,134 @@
+.message-reactions {
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.reactions-display {
+  display: flex;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+}
+
+.reaction-item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.875rem;
+}
+
+.reaction-item:hover {
+  background: #e9ecef;
+  transform: scale(1.05);
+}
+
+.reaction-item.user-reacted {
+  background: #e3f2fd;
+  border-color: #007bff;
+  color: #007bff;
+}
+
+.reaction-emoji {
+  font-size: 1rem;
+}
+
+.reaction-count {
+  font-weight: 500;
+  min-width: 1rem;
+  text-align: center;
+}
+
+.reaction-controls {
+  position: relative;
+}
+
+.add-reaction-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+  opacity: 0.7;
+}
+
+.add-reaction-btn:hover {
+  background: #f8f9fa;
+  opacity: 1;
+}
+
+.add-reaction-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.reaction-picker {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 0.5rem;
+  display: flex;
+  gap: 0.25rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+  margin-bottom: 0.5rem;
+}
+
+.reaction-picker::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: white;
+}
+
+.reaction-option {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.reaction-option:hover:not(:disabled) {
+  background: #f8f9fa;
+  transform: scale(1.2);
+}
+
+.reaction-option:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Animation for reaction picker */
+.reaction-picker {
+  animation: fadeInUp 0.2s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}

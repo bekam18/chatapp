@@ -1,0 +1,156 @@
+.message-actions {
+  position: relative;
+  display: inline-block;
+}
+
+.actions-trigger {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  opacity: 0;
+  transition: all 0.2s;
+  color: #666;
+}
+
+.message-item:hover .actions-trigger {
+  opacity: 1;
+}
+
+.actions-trigger:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.actions-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+  min-width: 150px;
+  margin-top: 0.25rem;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.actions-menu button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.2s;
+  font-size: 0.875rem;
+}
+
+.actions-menu button:hover {
+  background: #f8f9fa;
+}
+
+.actions-menu button:first-child {
+  border-radius: 8px 8px 0 0;
+}
+
+.actions-menu button:last-child {
+  border-radius: 0 0 8px 8px;
+}
+
+.actions-menu button.delete-action {
+  color: #dc3545;
+}
+
+.actions-menu button.delete-action:hover {
+  background: #fff5f5;
+}
+
+.action-icon {
+  font-size: 1rem;
+}
+
+.actions-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 99;
+}
+
+/* Edit Form */
+.message-edit-form {
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.message-edit-form textarea {
+  width: 100%;
+  min-height: 60px;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 0.875rem;
+  resize: vertical;
+}
+
+.message-edit-form textarea:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.edit-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
+}
+
+.edit-actions button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: opacity 0.2s;
+}
+
+.edit-actions button:first-child {
+  background: #6c757d;
+  color: white;
+}
+
+.edit-actions button:last-child {
+  background: #007bff;
+  color: white;
+}
+
+.edit-actions button:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.edit-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
