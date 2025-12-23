@@ -1,0 +1,15 @@
+# For Create React App in subfolder
+[build]
+  base = "client"                 # Your React app folder
+  publish = "client/build"        # CRA build output
+  command = "npm run build"       # Build command
+
+[build.environment]
+  NODE_VERSION = "18"
+  CI = "false"                    # Prevents build warnings from failing
+
+# SPA redirect rule - CRITICAL for React Router
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

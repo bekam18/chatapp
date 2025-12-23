@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import axios from 'axios';
+import { authAPI } from '../services/api';
+import { demoCurrentUser } from '../services/demoData';
 
 const AuthContext = createContext();
 
@@ -16,32 +17,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Configure axios defaults
-  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
-  axios.defaults.baseURL = API_BASE_URL;
-
-  // Set up axios interceptor for auth token
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    }
-
-    // Response interceptor to handle token expiration
-    const responseInterceptor = axios.interceptors.response.use(
-      (response) => response,
-      (error) => {
-        if (error.response?.status === 401) {
-          logout();
-        }
-        return Promise.reject(error);
-      }
-    );
-
-    return () => {
-      axios.interceptors.response.eject(responseInterceptor);
-    };
-  }, []);
+  const IS_DEMO_MODE = process.env.REACT_APP_DEMO_MODE === 'true' || process.env.NODE_ENV === 'production';
 
   // Check if user is logged in on app start
   useEffect(() => {
@@ -49,42 +25,50 @@ export const AuthProvider = ({ children }) => {
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          const response = await axios.get('/api/auth/profile');
-          setUser(response.data.data.user);
+          if (IS_DEMO_MODE) {
+            // In demo mode, just use the demo user
+            setUser(demoCurrentUser);
+          } else {
+            const response = await authAPI.getProfile();
+            setUser(response.data);
+          }
         } catch (error) {
           console.error('Auth check failed:', error);
           localStorage.removeItem('token');
-          delete axios.defaults.headers.common['Authorization'];
         }
       }
       setLoading(false);
     };
 
     checkAuth();
-  }, []);
+  }, [IS_DEMO_MODE]);
 
   const login = async (email, password) => {
     try {
       setError(null);
       setLoading(true);
 
-      const response = await axios.post('/api/auth/login', {
-        email,
-        password
-      });
-
-      const { user, token } = response.data.data;
+      const response = await authAPI.login(email, password);
+      const { user, token } = response.data;
       
-      // Store token and set up axios header
+      // Store token
       localStorage.setItem('token', token);
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      
       setUser(user);
       return { success: true };
     } catch (error) {
-      const message = error.response?.data?.message || 'Login failed';
-      setError(message);
-      return { success: false, error: message };
+      const message = IS_DEMO_MODE 
+        ? 'Demo Mode: Login successful! (Using demo data)' 
+        : (error.response?.data?.message || 'Login failed');
+      
+      if (IS_DEMO_MODE) {
+        // In demo mode, simulate successful login
+        localStorage.setItem('token', 'demo-token');
+        setUser(demoCurrentUser);
+        return { success: true };
+      } else {
+        setError(message);
+        return { success: false, error: message };
+      }
     } finally {
       setLoading(false);
     }
@@ -95,24 +79,27 @@ export const AuthProvider = ({ children }) => {
       setError(null);
       setLoading(true);
 
-      const response = await axios.post('/api/auth/register', {
-        username,
-        email,
-        password
-      });
-
-      const { user, token } = response.data.data;
+      const response = await authAPI.register(username, email, password);
+      const { user, token } = response.data;
       
-      // Store token and set up axios header
+      // Store token
       localStorage.setItem('token', token);
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      
       setUser(user);
       return { success: true };
     } catch (error) {
-      const message = error.response?.data?.message || 'Registration failed';
-      setError(message);
-      return { success: false, error: message };
+      const message = IS_DEMO_MODE 
+        ? 'Demo Mode: Registration successful! (Using demo data)' 
+        : (error.response?.data?.message || 'Registration failed');
+      
+      if (IS_DEMO_MODE) {
+        // In demo mode, simulate successful registration
+        localStorage.setItem('token', 'demo-token');
+        setUser({ ...demoCurrentUser, username, email });
+        return { success: true };
+      } else {
+        setError(message);
+        return { success: false, error: message };
+      }
     } finally {
       setLoading(false);
     }
@@ -120,14 +107,14 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      // Call logout endpoint to update user status
-      await axios.post('/api/auth/logout');
+      if (!IS_DEMO_MODE) {
+        await authAPI.logout();
+      }
     } catch (error) {
       console.error('Logout error:', error);
     } finally {
       // Clear local storage and state regardless of API call result
       localStorage.removeItem('token');
-      delete axios.defaults.headers.common['Authorization'];
       setUser(null);
       setError(null);
     }
