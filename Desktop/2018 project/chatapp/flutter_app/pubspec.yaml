@@ -1,0 +1,56 @@
+name: chatapp_flutter
+description: Advanced Real-Time Chat Application built with Flutter
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # HTTP and WebSocket
+  http: ^1.1.0
+  socket_io_client: ^2.0.3+1
+  
+  # State Management
+  provider: ^6.1.1
+  
+  # Storage
+  shared_preferences: ^2.2.2
+  flutter_secure_storage: ^9.0.0
+  
+  # UI and Media
+  cached_network_image: ^3.3.0
+  image_picker: ^1.0.4
+  file_picker: ^6.1.1
+  
+  # Permissions and Notifications
+  permission_handler: ^11.0.1
+  flutter_local_notifications: ^16.1.0
+  
+  # Utilities
+  intl: ^0.18.1
+  uuid: ^4.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+  
+  assets:
+    - assets/images/
+    - assets/icons/
+  
+  fonts:
+    - family: Roboto
+      fonts:
+        - asset: fonts/Roboto-Regular.ttf
+        - asset: fonts/Roboto-Bold.ttf
+          weight: 700
