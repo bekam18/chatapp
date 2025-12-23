@@ -12,6 +12,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background: #f5f5f5;
   color: #333;
+  /* Prevent zoom on iOS */
+  -webkit-text-size-adjust: 100%;
+  /* Prevent horizontal scroll */
+  overflow-x: hidden;
 }
 
 code {
@@ -22,6 +26,26 @@ code {
 .App {
   height: 100vh;
   overflow: hidden;
+  /* PWA safe area support for notched devices */
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* Mobile-first responsive design */
+@media (max-width: 768px) {
+  .App {
+    height: 100vh;
+    height: 100dvh; /* Dynamic viewport height for mobile */
+  }
+  
+  body {
+    /* Prevent pull-to-refresh on mobile */
+    overscroll-behavior-y: contain;
+    /* Improve touch scrolling */
+    -webkit-overflow-scrolling: touch;
+  }
 }
 
 /* Loading component */
@@ -33,6 +57,16 @@ code {
   font-size: 18px;
   color: #666;
   background: #f5f5f5;
+}
+
+/* Mobile loading adjustments */
+@media (max-width: 768px) {
+  .loading {
+    min-height: 100dvh;
+    font-size: 16px;
+    padding: 20px;
+    text-align: center;
+  }
 }
 
 /* Utility classes */
@@ -116,13 +150,13 @@ code {
   padding: 24px;
 }
 
-/* Button styles */
+/* Button styles with mobile improvements */
 .btn {
-  padding: 8px 16px;
+  padding: 12px 20px;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   transition: all 0.2s ease;
   text-decoration: none;
@@ -130,6 +164,23 @@ code {
   align-items: center;
   justify-content: center;
   gap: 8px;
+  /* Better touch targets on mobile */
+  min-height: 44px;
+  min-width: 44px;
+  /* Prevent text selection on touch */
+  -webkit-user-select: none;
+  user-select: none;
+  /* Remove tap highlight */
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (max-width: 768px) {
+  .btn {
+    padding: 14px 24px;
+    font-size: 16px;
+    min-height: 48px;
+    border-radius: 12px;
+  }
 }
 
 .btn:disabled {
@@ -176,14 +227,25 @@ code {
   color: white;
 }
 
-/* Form styles */
+/* Form styles with mobile improvements */
 .form-control {
   width: 100%;
-  padding: 10px 12px;
+  padding: 14px 16px;
   border: 2px solid #e1e5e9;
-  border-radius: 6px;
-  font-size: 14px;
+  border-radius: 8px;
+  font-size: 16px; /* Prevents zoom on iOS */
   transition: border-color 0.2s ease;
+  /* Better mobile input handling */
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+@media (max-width: 768px) {
+  .form-control {
+    padding: 16px 18px;
+    border-radius: 12px;
+    font-size: 16px;
+  }
 }
 
 .form-control:focus {
@@ -198,40 +260,74 @@ code {
 
 .invalid-feedback {
   color: #dc3545;
-  font-size: 12px;
-  margin-top: 4px;
+  font-size: 14px;
+  margin-top: 6px;
 }
 
-/* Card styles */
+/* Card styles with mobile improvements */
 .card {
   background: white;
-  border-radius: 8px;
+  border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
 
+@media (max-width: 768px) {
+  .card {
+    border-radius: 16px;
+    margin: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+}
+
 .card-header {
-  padding: 16px 20px;
+  padding: 20px 24px;
   border-bottom: 1px solid #e1e5e9;
   background: #f8f9fa;
 }
 
+@media (max-width: 768px) {
+  .card-header {
+    padding: 16px 20px;
+  }
+}
+
 .card-body {
-  padding: 20px;
+  padding: 24px;
+}
+
+@media (max-width: 768px) {
+  .card-body {
+    padding: 20px;
+  }
 }
 
 .card-footer {
-  padding: 16px 20px;
+  padding: 20px 24px;
   border-top: 1px solid #e1e5e9;
   background: #f8f9fa;
 }
 
+@media (max-width: 768px) {
+  .card-footer {
+    padding: 16px 20px;
+  }
+}
+
 /* Alert styles */
 .alert {
-  padding: 12px 16px;
-  border-radius: 6px;
+  padding: 16px 20px;
+  border-radius: 8px;
   margin-bottom: 16px;
   border: 1px solid transparent;
+}
+
+@media (max-width: 768px) {
+  .alert {
+    padding: 14px 18px;
+    border-radius: 12px;
+    margin: 10px;
+  }
 }
 
 .alert-success {
@@ -258,6 +354,45 @@ code {
   border-color: #bee5eb;
 }
 
+/* PWA Install Banner */
+.pwa-install-banner {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 16px 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 1000;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.pwa-install-banner .close-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
 /* Responsive utilities */
 @media (max-width: 768px) {
   .d-md-none {
@@ -266,6 +401,10 @@ code {
   
   .d-md-block {
     display: block !important;
+  }
+  
+  .d-md-flex {
+    display: flex !important;
   }
 }
 
@@ -276,5 +415,25 @@ code {
   
   .d-sm-block {
     display: block !important;
+  }
+  
+  .d-sm-flex {
+    display: flex !important;
+  }
+}
+
+/* Touch-friendly scrollbars on mobile */
+@media (max-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 2px;
   }
 }

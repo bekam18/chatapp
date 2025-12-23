@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Login from './components/Login';
 import Register from './components/Register';
 import Chat from './components/Chat';
+import PWAInstallPrompt from './components/PWAInstallPrompt';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { SocketProvider } from './context/SocketContext';
 import './App.css';
@@ -72,6 +73,7 @@ function App() {
       <Router>
         <div className="App">
           <DemoBanner />
+          <PWAInstallPrompt />
           <div style={{ marginTop: isDemoMode ? '40px' : '0' }}>
             <Routes>
               <Route 
