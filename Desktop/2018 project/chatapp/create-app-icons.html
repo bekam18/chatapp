@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create App Icons</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .icon-preview { margin: 20px 0; }
+        canvas { border: 1px solid #ddd; margin: 10px; }
+    </style>
+</head>
+<body>
+    <h1>ChatApp Icon Generator</h1>
+    <p>This will generate app icons for your PWA</p>
+    
+    <div class="icon-preview">
+        <h3>192x192 Icon</h3>
+        <canvas id="icon192" width="192" height="192"></canvas>
+        <button onclick="downloadIcon('icon192', '192x192')">Download 192x192</button>
+    </div>
+    
+    <div class="icon-preview">
+        <h3>512x512 Icon</h3>
+        <canvas id="icon512" width="512" height="512"></canvas>
+        <button onclick="downloadIcon('icon512', '512x512')">Download 512x512</button>
+    </div>
+
+    <script>
+        function createIcon(canvasId, size) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            
+            // Background gradient
+            const gradient = ctx.createLinearGradient(0, 0, size, size);
+            gradient.addColorStop(0, '#667eea');
+            gradient.addColorStop(1, '#764ba2');
+            
+            // Draw background
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, size, size);
+            
+            // Draw chat bubble
+            const centerX = size / 2;
+            const centerY = size / 2;
+            const bubbleSize = size * 0.6;
+            
+            // Main chat bubble
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            ctx.roundRect(centerX - bubbleSize/2, centerY - bubbleSize/2, bubbleSize, bubbleSize * 0.7, 20);
+            ctx.fill();
+            
+            // Chat bubble tail
+            ctx.beginPath();
+            ctx.moveTo(centerX - bubbleSize/4, centerY + bubbleSize/4);
+            ctx.lineTo(centerX - bubbleSize/2, centerY + bubbleSize/2);
+            ctx.lineTo(centerX - bubbleSize/6, centerY + bubbleSize/3);
+            ctx.fill();
+            
+            // Chat dots
+            const dotSize = size * 0.03;
+            const dotY = centerY - bubbleSize/8;
+            
+            ctx.fillStyle = '#667eea';
+            ctx.beginPath();
+            ctx.arc(centerX - bubbleSize/4, dotY, dotSize, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            ctx.beginPath();
+            ctx.arc(centerX, dotY, dotSize, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            ctx.beginPath();
+            ctx.arc(centerX + bubbleSize/4, dotY, dotSize, 0, 2 * Math.PI);
+            ctx.fill();
+        }
+        
+        function downloadIcon(canvasId, size) {
+            const canvas = document.getElementById(canvasId);
+            const link = document.createElement('a');
+            link.download = `icon-${size}.png`;
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+        
+        // Create icons when page loads
+        createIcon('icon192', 192);
+        createIcon('icon512', 512);
+    </script>
+</body>
+</html>

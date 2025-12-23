@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './components/Login';
 import Register from './components/Register';
 import Chat from './components/Chat';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
+import SplashScreen from './components/SplashScreen';
+import MobileStatusBar from './components/MobileStatusBar';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { SocketProvider } from './context/SocketContext';
+import { useMobileGestures } from './hooks/useMobileGestures';
 import './App.css';
 
 // Demo Banner Component
@@ -66,15 +69,59 @@ const PublicRoute = ({ children }) => {
 };
 
 function App() {
+  const [showSplash, setShowSplash] = useState(true);
   const isDemoMode = process.env.REACT_APP_DEMO_MODE === 'true' || process.env.NODE_ENV === 'production';
+  const { isStandalone, isMobile, vibrate } = useMobileGestures();
+
+  useEffect(() => {
+    // Add mobile-specific meta tags dynamically
+    if (isMobile()) {
+      const viewport = document.querySelector('meta[name="viewport"]');
+      if (viewport) {
+        viewport.setAttribute('content', 
+          'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover'
+        );
+      }
+
+      // Set theme color for mobile browsers
+      const themeColor = document.querySelector('meta[name="theme-color"]');
+      if (themeColor) {
+        themeColor.setAttribute('content', '#667eea');
+      }
+    }
+
+    // Handle app shortcuts and deep links
+    const handleAppShortcut = (event) => {
+      if (event.detail && event.detail.action) {
+        vibrate([50, 100, 50]);
+        // Handle shortcut actions here
+      }
+    };
+
+    window.addEventListener('appshortcut', handleAppShortcut);
+    return () => window.removeEventListener('appshortcut', handleAppShortcut);
+  }, [isMobile, vibrate]);
+
+  const handleSplashComplete = () => {
+    setShowSplash(false);
+  };
+
+  // Show splash screen on first load for standalone apps
+  if (showSplash && isStandalone()) {
+    return <SplashScreen onComplete={handleSplashComplete} />;
+  }
   
   return (
     <AuthProvider>
       <Router>
         <div className="App">
+          <MobileStatusBar />
           <DemoBanner />
           <PWAInstallPrompt />
-          <div style={{ marginTop: isDemoMode ? '40px' : '0' }}>
+          <div style={{ 
+            marginTop: isDemoMode ? '40px' : '0',
+            paddingTop: isStandalone() ? 'env(safe-area-inset-top)' : '0'
+          }}>
             <Routes>
               <Route 
                 path="/login" 
