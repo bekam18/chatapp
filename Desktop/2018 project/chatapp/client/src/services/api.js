@@ -1,6 +1,8 @@
 import axios from 'axios';
+import { createDemoAPI } from './demoData';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+const IS_DEMO_MODE = process.env.REACT_APP_DEMO_MODE === 'true' || process.env.NODE_ENV === 'production';
 
 // Create axios instance
 const api = axios.create({
@@ -38,8 +40,10 @@ api.interceptors.response.use(
   }
 );
 
-// API functions
-export const authAPI = {
+// API functions - use demo data in production
+const demoAPI = createDemoAPI();
+
+export const authAPI = IS_DEMO_MODE ? demoAPI.authAPI : {
   login: (email, password) => 
     api.post('/api/auth/login', { email, password }),
   
@@ -53,7 +57,7 @@ export const authAPI = {
     api.get('/api/auth/profile')
 };
 
-export const usersAPI = {
+export const usersAPI = IS_DEMO_MODE ? demoAPI.usersAPI : {
   getUsers: () => 
     api.get('/api/users'),
   
@@ -64,7 +68,7 @@ export const usersAPI = {
     api.get(`/api/users/${id}`)
 };
 
-export const messagesAPI = {
+export const messagesAPI = IS_DEMO_MODE ? demoAPI.messagesAPI : {
   getMessages: (userId, page = 1, limit = 50) => 
     api.get(`/api/messages/${userId}?page=${page}&limit=${limit}`),
   
@@ -84,7 +88,7 @@ export const messagesAPI = {
     api.delete(`/api/messages/${messageId}`)
 };
 
-export const groupsAPI = {
+export const groupsAPI = IS_DEMO_MODE ? demoAPI.groupsAPI : {
   getGroups: () => 
     api.get('/api/groups'),
   
