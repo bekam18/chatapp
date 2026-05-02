@@ -1,6 +1,9 @@
 class Constants {
-  // API Configuration
-  static const String baseUrl = 'http://10.0.2.2:5000'; // Android emulator
+  // API Configuration for Phone Development
+  // Replace 'YOUR_COMPUTER_IP' with your actual computer IP address
+  // Find it using: ipconfig (Windows) or ifconfig (Mac/Linux)
+  static const String baseUrl = 'http:// 192.168.137.236'; // Update this IP!
+  // static const String baseUrl = 'http://10.0.2.2:5000'; // Android emulator
   // static const String baseUrl = 'http://localhost:5000'; // iOS simulator
   // static const String baseUrl = 'https://your-backend-url.herokuapp.com'; // Production
   

@@ -1,30 +1,42 @@
 @echo off
-echo Creating Flutter Chat App...
+echo 📱 Flutter Chat App - Phone Setup
 echo.
 
 echo Step 1: Checking Flutter installation...
 flutter doctor
-
 echo.
-echo Step 2: Creating Flutter project...
-flutter create flutter_app
 
+echo Step 2: Checking connected devices...
+flutter devices
 echo.
-echo Step 3: Moving to Flutter directory...
+
+echo Step 3: Moving to Flutter app directory...
 cd flutter_app
 
-echo.
-echo Step 4: Getting dependencies...
+echo Step 4: Getting Flutter dependencies...
 flutter pub get
+echo.
+
+echo Step 5: Ready to run on your phone!
+echo.
+echo Make sure your phone is connected via USB with:
+echo - USB Debugging enabled
+echo - Developer mode enabled
+echo - Phone unlocked and "Allow USB Debugging" accepted
+echo.
+echo Press any key to run the app on your phone...
+pause
 
 echo.
-echo Flutter app created successfully!
+echo 🚀 Running Flutter app on your phone...
+flutter run
+
 echo.
-echo To run the app:
-echo 1. cd flutter_app
-echo 2. flutter run (make sure device/emulator is connected)
+echo App should now be running on your phone!
 echo.
-echo To build APK:
-echo 1. flutter build apk
+echo Hot reload commands:
+echo - Press 'r' for hot reload
+echo - Press 'R' for hot restart  
+echo - Press 'q' to quit
 echo.
 pause
